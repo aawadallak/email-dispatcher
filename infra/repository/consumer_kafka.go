@@ -29,7 +29,7 @@ func (k *Consumer) Consumer() (*domain.Message, error) {
 
 	ctx := context.Background()
 
-	dto := dto.KafkaResponse{}
+	var dto dto.EmailDTO
 
 	message, err := k.reader.ReadMessage(ctx)
 
@@ -43,7 +43,7 @@ func (k *Consumer) Consumer() (*domain.Message, error) {
 		return nil, err
 	}
 
-	dmn := domain.NewMessage(config.GetConfig().MailUser, dto.To, dto.Subject, dto.Template)
+	dmn := domain.NewMessage(dto.From, dto.To, dto.Subject, dto.Template)
 
 	return &dmn, nil
 }
