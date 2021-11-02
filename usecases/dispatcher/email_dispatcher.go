@@ -18,7 +18,7 @@ func NewEmailDispatcher(mail mail.Repository, consumer consumer.Repository) Usec
 	}
 }
 
-func (d *Dispatcher) Dispatch() {
+func (d *Dispatcher) EventDispatch() {
 	for {
 
 		msg, err := d.consumer.Consumer()

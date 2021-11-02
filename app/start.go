@@ -21,5 +21,5 @@ func Start() {
 
 	svc := dispatcher.NewEmailDispatcher(mail, consumer)
 
-	svc.Dispatch()
+	svc.EventDispatch()
 }
