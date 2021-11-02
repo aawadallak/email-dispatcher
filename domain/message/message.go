@@ -1,10 +1,12 @@
 package message
 
 type Message struct {
-	from    string
-	to      string
-	subject string
-	body    string
+	from       string
+	to         string
+	cc         string
+	subject    string
+	body       string
+	attachment *[]Attachment
 }
 
 func NewMessage(from, to, subject, body string) Message {
@@ -24,10 +26,18 @@ func (m *Message) To() string {
 	return m.to
 }
 
+func (m *Message) CC() string {
+	return m.cc
+}
+
 func (m *Message) Subject() string {
 	return m.subject
 }
 
 func (m *Message) Body() string {
 	return m.body
+}
+
+func (m *Message) Attachments() *[]Attachment {
+	return m.attachment
 }
