@@ -9,6 +9,8 @@ import (
 
 func Start() {
 
+	config.Logger().Info("Starting service")
+
 	setup := mail.NewMail(
 		config.GetConfig().MailSmtp,
 		config.GetConfig().MailUser,
@@ -21,5 +23,5 @@ func Start() {
 
 	svc := dispatcher.NewEmailDispatcher(mail, consumer)
 
-	svc.Dispatch()
+	svc.EventDispatch()
 }

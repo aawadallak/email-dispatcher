@@ -2,6 +2,7 @@ package main
 
 import (
 	"latest/app"
+	"latest/app/http"
 	"latest/config"
 )
 
@@ -9,7 +10,9 @@ func main() {
 
 	config.Init()
 	config.InitLogger()
-	config.Logger().Info("Starting service")
+
+	api := http.NewServer()
+	go api.Run()
 
 	app.Start()
 }
