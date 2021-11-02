@@ -2,8 +2,8 @@ package http
 
 import (
 	"latest/app/http/routes"
+	"latest/config"
 	"log"
-	"os"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/logger"
@@ -16,7 +16,7 @@ type Server struct {
 
 func NewServer() Server {
 	return Server{
-		Port:   os.Getenv("SERVER_PORT"),
+		Port:   config.GetConfig().ServerPort,
 		Server: fiber.New(fiber.Config{}),
 	}
 }
@@ -24,6 +24,8 @@ func NewServer() Server {
 func (s *Server) Run() {
 
 	s.Server.Use(logger.New(logger.ConfigDefault))
+
+	config.Logger().Info("Starting API Service")
 
 	router := routes.SetRoute(s.Server)
 	log.Fatalln(router.Listen(s.Port))

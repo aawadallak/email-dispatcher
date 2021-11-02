@@ -9,6 +9,8 @@ import (
 
 func Start() {
 
+	config.Logger().Info("Starting service")
+
 	setup := mail.NewMail(
 		config.GetConfig().MailSmtp,
 		config.GetConfig().MailUser,

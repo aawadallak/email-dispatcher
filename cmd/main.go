@@ -10,10 +10,9 @@ func main() {
 
 	config.Init()
 	config.InitLogger()
-	config.Logger().Info("Starting service")
-
-	app.Start()
 
 	api := http.NewServer()
 	go api.Run()
+
+	app.Start()
 }

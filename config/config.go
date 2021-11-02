@@ -13,6 +13,7 @@ type App struct {
 	MailUser     string `mapstructure:"gmail_smtp_user"`
 	MailPassword string `mapstructure:"gmail_smtp_pass"`
 	MailPort     uint   `mapstructure:"gmail_smtp_port"`
+	ServerPort   string `mapstructure:"server_port"`
 }
 
 var envConfig *viper.Viper
