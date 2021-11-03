@@ -43,7 +43,7 @@ func (k *Consumer) Consumer() (*domain.Message, error) {
 		return nil, err
 	}
 
-	dmn := domain.NewMessage(dto.From, dto.To, dto.Subject, dto.Template)
+	dmn := domain.
 
 	return &dmn, nil
 }

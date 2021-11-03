@@ -21,7 +21,8 @@ func NewMailRepository(mail *mail.Mail) MailRepository {
 func (m MailRepository) SendMessage(e message.Message) error {
 	y := gomail.NewMessage()
 	y.SetHeader("From", e.From())
-	y.SetHeader("To", e.To())
+	y.SetHeader("To", e.To()...)
+	y.SetHeader("Cc", e.CC()...)
 	y.SetHeader("Subject", e.Subject())
 	y.SetBody("text/html", e.Body())
 
