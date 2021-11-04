@@ -18,10 +18,11 @@ func Start() {
 		config.GetConfig().MailPort,
 	)
 
-	consumer := repository.NewConsumer()
 	mail := repository.NewMailRepository(setup)
 
-	svc := dispatcher.NewEmailDispatcher(mail, consumer)
+	consumer := repository.NewConsumer()
+
+	svc := dispatcher.NewConsumerDispatcher(mail, consumer)
 
 	svc.EventDispatch()
 }

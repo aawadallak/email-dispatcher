@@ -1,4 +1,4 @@
-//go:build dev
+// +build dev
 
 package config
 
@@ -14,7 +14,7 @@ type App struct {
 	MailSmtp     string `mapstructure:"smtp_server"`
 	MailUser     string `mapstructure:"smtp_user"`
 	MailPassword string `mapstructure:"smtp_pass"`
-	MailPort     uint   `mapstructure:"smtp_port""`
+	MailPort     uint   `mapstructure:"smtp_port"`
 	ServerPort   string `mapstructure:"server_port"`
 }
 

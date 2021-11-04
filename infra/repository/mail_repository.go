@@ -1,9 +1,10 @@
 package repository
 
 import (
+	"io"
+	"latest/domain"
 	"latest/domain/mail"
 	"latest/domain/message"
-	"log"
 
 	"gopkg.in/gomail.v2"
 )
@@ -18,7 +19,7 @@ func NewMailRepository(mail *mail.Mail) MailRepository {
 	}
 }
 
-func (m MailRepository) SendMessage(e message.Message) error {
+func (m MailRepository) SendMessage(e message.Message) *domain.Err {
 	y := gomail.NewMessage()
 	y.SetHeader("From", e.From())
 	y.SetHeader("To", e.To()...)
@@ -26,9 +27,15 @@ func (m MailRepository) SendMessage(e message.Message) error {
 	y.SetHeader("Subject", e.Subject())
 	y.SetBody("text/html", e.Body())
 
+	for _, attach := range e.Attachments() {
+		y.Attach(attach.Name(), gomail.SetCopyFunc(func(w io.Writer) error {
+			_, err := w.Write([]byte(attach.Content()))
+			return err
+		}))
+	}
+
 	if err := m.Dialer.DialAndSend(y); err != nil {
-		log.Println(err)
-		return err
+		return domain.NewError(500, err.Error())
 	}
 	return nil
 }
