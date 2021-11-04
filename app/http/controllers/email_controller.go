@@ -24,7 +24,13 @@ func (e *EmailController) MultiPartDispatch(c *fiber.Ctx) error {
 
 	files, err := c.MultipartForm()
 
-	defer files.RemoveAll()
+	defer func() error {
+		err := files.RemoveAll()
+		if err != nil {
+			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		}
+		return nil
+	}()
 
 	if err != nil {
 		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
