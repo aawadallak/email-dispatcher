@@ -11,11 +11,14 @@ func SetRoute(router *fiber.App) *fiber.App {
 
 	controller := controllers.NewEmailController()
 
-	// Define the group router which will be used on project
+	// Set main route group
 	api := router.Group("api/v1")
 
-	// Router responsable to dispatch emails, recive a request body with content
+	// Dispatch an email with attachments with JSON Body containing enconded base64 attachments
 	api.Post("/dispatch", controller.DispatchEmail)
+
+	// Dispatch an email with attachments using multipart
+	api.Post("/dispatch/attachment", controller.MultiPartDispatch)
 
 	// Health check route, use for check application is running
 	api.Get("/ping", func(c *fiber.Ctx) error {

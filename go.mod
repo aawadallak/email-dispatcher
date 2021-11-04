@@ -4,8 +4,10 @@ go 1.16
 
 require (
 	github.com/andybalholm/brotli v1.0.3 // indirect
+	github.com/go-playground/validator/v10 v10.9.0 // indirect
 	github.com/gofiber/fiber/v2 v2.21.0 // indirect
 	github.com/klauspost/compress v1.13.6 // indirect
+	github.com/mitchellh/mapstructure v1.4.2 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/segmentio/kafka-go v0.4.17
 	github.com/spf13/viper v1.8.1 //
