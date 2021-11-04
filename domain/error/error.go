@@ -13,14 +13,10 @@ func (e *Err) Code() int {
 func (e *Err) Message() string {
 	return e.message
 }
-func (e *Err) Module() string {
-	return e.module
-}
 
 func NewError(code int, message, module string) Err {
 	return Err{
 		code:    code,
 		message: message,
-		module:  module,
 	}
 }

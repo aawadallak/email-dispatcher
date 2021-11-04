@@ -16,7 +16,7 @@ type MultiPartEmailDTO struct {
 	Attachment []*multipart.FileHeader `json:"attachments,omitempty"`
 }
 
-func (m *MultiPartEmailDTO) Convert2Entity() (*message.Message, error) {
+func (m *MultiPartEmailDTO) Convert2Entity() (*message.Message, *ErrorDTO) {
 
 	var files []*message.Attachment
 
@@ -24,7 +24,10 @@ func (m *MultiPartEmailDTO) Convert2Entity() (*message.Message, error) {
 		f, _ := v.Open()
 		buf := bytes.NewBuffer(nil)
 		if _, err := io.Copy(buf, f); err != nil {
-			return nil, err
+			return nil, &ErrorDTO{
+				Code:    500,
+				Message: err.Error(),
+			}
 		}
 		file := message.NewAttachment(v.Filename, buf.String())
 		files = append(files, &file)

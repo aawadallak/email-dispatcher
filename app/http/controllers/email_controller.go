@@ -20,42 +20,54 @@ func (e *EmailController) DispatchEmail(c *fiber.Ctx) error {
 
 func (e *EmailController) MultiPartDispatch(c *fiber.Ctx) error {
 
-	var dto dto.MultiPartEmailDTO
+	var req dto.MultiPartEmailDTO
 
 	files, err := c.MultipartForm()
+
+	if err != nil {
+		return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
+			Code:    400,
+			Message: err.Error(),
+		})
+	}
 
 	defer func() error {
 		err := files.RemoveAll()
 		if err != nil {
-			return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+			return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
+				Code:    400,
+				Message: err.Error(),
+			})
 		}
 		return nil
 	}()
 
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
-	}
-
-	err = mapstructure.Decode(files.Value, &dto)
+	err = mapstructure.Decode(files.Value, &req)
 
 	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+		return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
+			Code:    400,
+			Message: err.Error(),
+		})
 	}
 
-	if err = validate.Struct(&dto); err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	if err = validate.Struct(&req); err != nil {
+		return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
+			Code:    400,
+			Message: err.Error(),
+		})
 	}
 
 	for _, file := range files.File {
 		for range file {
-			dto.Attachment = append(dto.Attachment, file...)
+			req.Attachment = append(req.Attachment, file...)
 		}
 	}
 
-	message, err := dto.Convert2Entity()
+	message, errEntity := req.Convert2Entity()
 
-	if err != nil {
-		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"error": err.Error()})
+	if errEntity != nil {
+		return c.Status(fiber.StatusOK).JSON(errEntity)
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": message})
