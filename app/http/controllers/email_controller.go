@@ -1,8 +1,11 @@
 package controllers
 
 import (
+	"latest/config/email"
 	"latest/dto"
+	"latest/infra/repository"
 	"latest/pkg/validate"
+	"latest/usecases/dispatcher"
 
 	"github.com/gofiber/fiber/v2"
 	"github.com/mitchellh/mapstructure"
@@ -53,7 +56,6 @@ func (e *EmailController) MultiPartDispatch(c *fiber.Ctx) error {
 
 	if err = validate.Struct(&req); err != nil {
 		return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
-			Code:    400,
 			Message: err.Error(),
 		})
 	}
@@ -64,11 +66,9 @@ func (e *EmailController) MultiPartDispatch(c *fiber.Ctx) error {
 		}
 	}
 
-	message, errEntity := req.Convert2Entity()
+	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
 
-	if errEntity != nil {
-		return c.Status(fiber.StatusOK).JSON(errEntity)
-	}
+	go svc.DisptachEmail(&req)
 
-	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": message})
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})
 }

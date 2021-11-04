@@ -3,12 +3,14 @@ package main
 import (
 	"latest/app/http"
 	"latest/config"
+	"latest/config/email"
 )
 
 func main() {
 
-	config.Init()
 	config.InitLogger()
+	config.Init()
+	email.Setup()
 
 	api := http.NewServer()
 	api.Run()

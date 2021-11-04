@@ -1,4 +1,4 @@
-//go:build dev
+// +build dev
 
 package config
 
