@@ -7,5 +7,6 @@ import (
 
 type Usecases interface {
 	EventDispatch()
-	DisptachEmail(obj *dto.MultiPartEmailDTO) *domain.Err
+	MultipartAttachments(obj *dto.MultiPartEmailDTO) *domain.Err
+	EncondedAttachments(obj *dto.EmailDTO) *domain.Err
 }

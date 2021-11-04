@@ -1,11 +1,7 @@
 package message
 
 import (
-	"bufio"
 	"encoding/base64"
-	"fmt"
-	"io/ioutil"
-	"os"
 )
 
 type Attachment struct {
@@ -28,31 +24,9 @@ func (a *Attachment) Content() string {
 	return a.content
 }
 
-func (a *Attachment) EncodeToBase64(path string) (string, error) {
-	// Open file on disk.
-	f, err := os.Open(fmt.Sprintf("./tmp/%s", path))
+func (a *Attachment) DecodeBase64() ([]byte, error) {
 
-	if err != nil {
-		return "", err
-	}
-
-	// Read entire file into byte slice.
-	reader := bufio.NewReader(f)
-	content, err := ioutil.ReadAll(reader)
-
-	if err != nil {
-		return "", err
-	}
-
-	// Encode as base64.
-	encoded := base64.StdEncoding.EncodeToString(content)
-
-	return encoded, nil
-}
-
-func (a *Attachment) DecodeBase64(content string) ([]byte, error) {
-
-	decode, err := base64.StdEncoding.DecodeString(content)
+	decode, err := base64.StdEncoding.DecodeString(a.content)
 
 	if err != nil {
 		return nil, err

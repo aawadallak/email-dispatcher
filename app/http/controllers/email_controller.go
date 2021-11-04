@@ -17,11 +17,7 @@ func NewEmailController() Controller {
 	return &EmailController{}
 }
 
-func (e *EmailController) DispatchEmail(c *fiber.Ctx) error {
-	return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "Pong"})
-}
-
-func (e *EmailController) MultiPartDispatch(c *fiber.Ctx) error {
+func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 
 	var req dto.MultiPartEmailDTO
 
@@ -68,7 +64,37 @@ func (e *EmailController) MultiPartDispatch(c *fiber.Ctx) error {
 
 	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
 
-	go svc.DisptachEmail(&req)
+	sendErr := svc.MultipartAttachments(&req)
+
+	if sendErr != nil {
+		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
+	}
+
+	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})
+}
+
+func (e *EmailController) EncondedAttachments(c *fiber.Ctx) error {
+
+	var req dto.EmailDTO
+
+	err := c.BodyParser(&req)
+	if err != nil {
+		return c.Status(fiber.StatusBadRequest).JSON(fiber.Map{"message": err.Error()})
+	}
+
+	if err = validate.Struct(&req); err != nil {
+		return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
+			Message: err.Error(),
+		})
+	}
+
+	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
+
+	sendErr := svc.EncondedAttachments(&req)
+
+	if sendErr != nil {
+		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
+	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})
 }

@@ -36,7 +36,7 @@ func (d *Dispatcher) EventDispatch() {
 			continue
 		}
 
-		sendErr := d.mail.SendMessage(*msg)
+		sendErr := d.mail.SendMessage(msg)
 
 		if sendErr != nil {
 			config.Logger().Warn(sendErr.Message())
@@ -46,7 +46,7 @@ func (d *Dispatcher) EventDispatch() {
 	}
 }
 
-func (d *Dispatcher) DisptachEmail(obj *dto.MultiPartEmailDTO) *domain.Err {
+func (d *Dispatcher) MultipartAttachments(obj *dto.MultiPartEmailDTO) *domain.Err {
 
 	dmn, err := obj.Convert2Entity()
 
@@ -54,11 +54,32 @@ func (d *Dispatcher) DisptachEmail(obj *dto.MultiPartEmailDTO) *domain.Err {
 		return err
 	}
 
-	err = d.mail.SendMessage(*dmn)
+	go func() error {
+		err = d.mail.SendMessage(dmn)
+		if err != nil {
+			config.Logger().Warnf("Cant send email %s", err.Message())
+		}
+		return nil
+	}()
+
+	return nil
+}
+
+func (d *Dispatcher) EncondedAttachments(obj *dto.EmailDTO) *domain.Err {
+
+	dmn, err := obj.Convert2Entity()
 
 	if err != nil {
 		return err
 	}
+
+	go func() error {
+		err = d.mail.SendMessageBase64(dmn)
+		if err != nil {
+			config.Logger().Warnf("Cant send email %s", err.Message())
+		}
+		return nil
+	}()
 
 	return nil
 }
