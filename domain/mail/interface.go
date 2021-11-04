@@ -6,5 +6,6 @@ import (
 )
 
 type Repository interface {
-	SendMessage(e message.Message) *domain.Err
+	SendMessage(e *message.Message) *domain.Err
+	SendMessageBase64(e *message.Message) *domain.Err
 }

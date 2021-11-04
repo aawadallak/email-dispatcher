@@ -15,14 +15,14 @@ func SetRoute(router *fiber.App) *fiber.App {
 	api := router.Group("api/v1")
 
 	// Dispatch an email with attachments with JSON Body containing enconded base64 attachments
-	api.Post("/dispatch", controller.DispatchEmail)
+	api.Post("/dispatch", controller.EncondedAttachments)
 
 	// Dispatch an email with attachments using multipart
-	api.Post("/dispatch/attachment", controller.MultiPartDispatch)
+	api.Post("/dispatch/attachment", controller.MultipartDispatch)
 
 	// Health check route, use for check application is running
 	api.Get("/ping", func(c *fiber.Ctx) error {
-		return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "running..."})
+		return c.Status(fiber.StatusOK).JSON(fiber.Map{"message": "service is running"})
 	})
 
 	return router
