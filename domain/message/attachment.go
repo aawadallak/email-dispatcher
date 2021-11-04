@@ -20,6 +20,14 @@ func NewAttachment(name string, content string) Attachment {
 	}
 }
 
+func (a *Attachment) Name() string {
+	return a.name
+}
+
+func (a *Attachment) Content() string {
+	return a.content
+}
+
 func (a *Attachment) EncodeToBase64(path string) (string, error) {
 	// Open file on disk.
 	f, err := os.Open(fmt.Sprintf("./tmp/%s", path))

@@ -30,6 +30,5 @@ func (m MailRepository) SendMessage(e message.Message) error {
 		log.Println(err)
 		return err
 	}
-
 	return nil
 }

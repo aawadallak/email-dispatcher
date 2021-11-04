@@ -8,11 +8,11 @@ import (
 )
 
 type MultiPartEmailDTO struct {
-	From       []string                `mapstructure:"from" validate:"required,max=1"`
+	From       []string                `mapstructure:"from" validate:"required,min=1,max=1"`
 	To         []string                `mapstructure:"to" validate:"required"`
-	Subject    []string                `mapstructure:"subject" validate:"required"`
+	Subject    []string                `mapstructure:"subject" validate:"required,min=1,max=1"`
 	Cc         []string                `mapstructure:"cc"`
-	Body       []string                `mapstructure:"body" validate:"required,max=1"`
+	Body       []string                `mapstructure:"body,omitempty" validate:"min=1,max=1"`
 	Attachment []*multipart.FileHeader `json:"attachments,omitempty"`
 }
 

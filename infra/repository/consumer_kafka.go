@@ -43,7 +43,21 @@ func (k *Consumer) Consumer() (*domain.Message, error) {
 		return nil, err
 	}
 
-	dmn := domain.
+	var attachments []*domain.Attachment
 
-	return &dmn, nil
+	for _, v := range dto.Attachment {
+		dmn := domain.NewAttachment(v.Name, v.Content)
+		attachments = append(attachments, &dmn)
+	}
+
+	domain := new(domain.MessageBuilder).
+		WithFrom(dto.From).
+		WithTo(dto.To).
+		WithCC(dto.Cc).
+		WithSubject(dto.Subject).
+		WithBody(dto.Body).
+		WithAttachments(attachments).
+		Create()
+
+	return domain, nil
 }

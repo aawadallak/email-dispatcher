@@ -1,6 +1,7 @@
 package http
 
 import (
+	"fmt"
 	"latest/app/http/routes"
 	"latest/config"
 	"log"
@@ -28,5 +29,5 @@ func (s *Server) Run() {
 	config.Logger().Info("Starting API Service")
 
 	router := routes.SetRoute(s.Server)
-	log.Fatalln(router.Listen(s.Port))
+	log.Fatalln(router.Listen(fmt.Sprintf(":%s", s.Port)))
 }
