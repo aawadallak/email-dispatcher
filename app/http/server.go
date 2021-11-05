@@ -3,7 +3,6 @@ package http
 import (
 	"fmt"
 	"latest/app/http/routes"
-	"latest/config"
 	zapper "latest/pkg/logger"
 	"log"
 
@@ -18,7 +17,7 @@ type Server struct {
 
 func NewServer() Server {
 	return Server{
-		Port:   config.GetConfig().ServerPort,
+		Port:   "6728",
 		Server: fiber.New(fiber.Config{}),
 	}
 }

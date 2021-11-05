@@ -15,7 +15,6 @@ type App struct {
 	MailUser     string `mapstructure:"smtp_user"`
 	MailPassword string `mapstructure:"smtp_pass"`
 	MailPort     uint   `mapstructure:"smtp_port"`
-	ServerPort   string `mapstructure:"server_port"`
 }
 
 var envConfig *viper.Viper
