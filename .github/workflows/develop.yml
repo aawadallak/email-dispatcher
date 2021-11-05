@@ -1,4 +1,4 @@
-name: Deploying application
+name: Testing application
 
 on:
   pull_request:
