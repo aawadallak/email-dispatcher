@@ -25,12 +25,11 @@ func (d *Dispatcher) MultipartAttachments(obj *dto.MultiPartEmailDTO) *domain.Er
 		return err
 	}
 
-	go func() error {
+	go func() {
 		err = d.mail.SendMessage(dmn)
 		if err != nil {
 			config.Logger().Warnf("Cant send email %s", err.Message())
 		}
-		return nil
 	}()
 
 	return nil
@@ -44,12 +43,11 @@ func (d *Dispatcher) Base64Attachments(obj *dto.EmailDTO) *domain.Err {
 		return err
 	}
 
-	go func() error {
+	go func() {
 		err = d.mail.SendMessageBase64(dmn)
 		if err != nil {
 			config.Logger().Warnf("Cant send email %s", err.Message())
 		}
-		return nil
 	}()
 
 	return nil

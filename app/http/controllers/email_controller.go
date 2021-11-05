@@ -67,7 +67,7 @@ func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 	sendErr := svc.MultipartAttachments(&req)
 
 	if sendErr != nil {
-		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
+		return c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})
@@ -93,7 +93,7 @@ func (e *EmailController) EncondedAttachments(c *fiber.Ctx) error {
 	sendErr := svc.Base64Attachments(&req)
 
 	if sendErr != nil {
-		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
+		return c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})
