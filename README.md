@@ -42,7 +42,7 @@ Path: http://localhost:{exposed_port}/api/v1/email/dispatch
 Body: content-type application/json
 ```
 
-![enter image description here](https://user-images.githubusercontent.com/74802742/140552332-355dd506-ee3d-401f-81d4-8aaf24a8f88c.png)
+![enter image description here](https://user-images.githubusercontent.com/74802742/140557285-7d7b5591-aa0b-400e-8ca0-a532a356fa50.png)
 
 <p><strong>Dispatch using multipart files</strong></p>
 
