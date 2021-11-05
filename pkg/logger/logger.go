@@ -1,6 +1,6 @@
 //go:build !dev
 
-package config
+package logger
 
 import (
 	"fmt"
@@ -11,7 +11,7 @@ import (
 	"go.uber.org/zap/zapcore"
 )
 
-var sugarLogger *zap.SugaredLogger
+var Zap *zap.SugaredLogger
 
 func InitLogger() {
 	writerSyncer := getLogWriter()
@@ -22,7 +22,7 @@ func InitLogger() {
 
 	logger := zap.New(core, zap.AddCaller())
 
-	sugarLogger = logger.Sugar()
+	Zap = logger.Sugar()
 }
 
 func getEncoder() zapcore.Encoder {
@@ -43,6 +43,6 @@ func getLogWriter() zapcore.WriteSyncer {
 	return zapcore.AddSync(lumberJackLogger)
 }
 
-func Logger() *zap.SugaredLogger {
-	return sugarLogger
+func Instance() *zap.SugaredLogger {
+	return Zap
 }

@@ -4,11 +4,12 @@ import (
 	"latest/app/http"
 	"latest/config"
 	"latest/config/email"
+	"latest/pkg/logger"
 )
 
 func main() {
 
-	config.InitLogger()
+	logger.InitLogger()
 	config.Init()
 	email.Setup()
 

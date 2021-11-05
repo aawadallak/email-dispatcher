@@ -1,10 +1,10 @@
 package dispatcher
 
 import (
-	"latest/config"
 	"latest/domain"
 	"latest/domain/mail"
 	"latest/dto"
+	"latest/pkg/logger"
 )
 
 type Dispatcher struct {
@@ -28,7 +28,7 @@ func (d *Dispatcher) MultipartAttachments(obj *dto.MultiPartEmailDTO) *domain.Er
 	go func() {
 		err = d.mail.SendMessage(dmn)
 		if err != nil {
-			config.Logger().Warnf("Cant send email %s", err.Message())
+			logger.Instance().Warnf("Cant send email %s", err.Message())
 		}
 	}()
 
@@ -46,7 +46,7 @@ func (d *Dispatcher) Base64Attachments(obj *dto.EmailDTO) *domain.Err {
 	go func() {
 		err = d.mail.SendMessageBase64(dmn)
 		if err != nil {
-			config.Logger().Warnf("Cant send email %s", err.Message())
+			logger.Instance().Warnf("Cant send email %s", err.Message())
 		}
 	}()
 

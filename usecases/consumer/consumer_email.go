@@ -1,9 +1,9 @@
 package consumer
 
 import (
-	"latest/config"
 	"latest/domain/consumer"
 	"latest/domain/mail"
+	"latest/pkg/logger"
 )
 
 type Consumer struct {
@@ -24,14 +24,13 @@ func (d *Consumer) Dispatch() {
 		msg, err := d.consumer.Consumer()
 
 		if err != nil {
-			config.Logger().Error(err.Error())
+			logger.Instance().Error(err.Error())
 			continue
 		}
 
 		sendErr := d.mail.SendMessageBase64(msg)
 
 		if sendErr != nil {
-			config.Logger().Warn(sendErr.Message())
 			continue
 		}
 
