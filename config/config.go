@@ -28,7 +28,6 @@ func Init() {
 		MailUser:     os.Getenv("SMTP_USER"),
 		MailPassword: os.Getenv("STMP_PASS"),
 		MailPort:     uint(port),
-		ServerPort:   os.Getenv("SERVER_PORT"),
 	}
 }
 

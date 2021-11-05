@@ -26,8 +26,8 @@ WORKDIR /root/
 # Copy the Pre-built binary file from the previous stage
 COPY --from=builder /app/telegram-bot/build/main .
 
-# Expose port 8080 to the outside world
-EXPOSE 8080
+# Expose port 6728 to the outside world
+EXPOSE 6728
 
 # Command to run the executable
 CMD ["./main"] 
