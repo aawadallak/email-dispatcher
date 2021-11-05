@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"latest/config"
 	"latest/config/email"
 	"latest/dto"
 	"latest/infra/repository"
@@ -30,15 +31,11 @@ func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 		})
 	}
 
-	defer func() error {
+	defer func() {
 		err := files.RemoveAll()
 		if err != nil {
-			return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
-				Code:    400,
-				Message: err.Error(),
-			})
+			config.Logger().Warn(err.Error())
 		}
-		return nil
 	}()
 
 	err = mapstructure.Decode(files.Value, &req)
