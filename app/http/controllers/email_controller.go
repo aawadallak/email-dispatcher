@@ -1,10 +1,10 @@
 package controllers
 
 import (
-	"latest/config"
 	"latest/config/email"
 	"latest/dto"
 	"latest/infra/repository"
+	"latest/pkg/logger"
 	"latest/pkg/validate"
 	"latest/usecases/dispatcher"
 
@@ -34,7 +34,7 @@ func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 	defer func() {
 		err := files.RemoveAll()
 		if err != nil {
-			config.Logger().Warn(err.Error())
+			logger.Instance().Warn(err.Error())
 		}
 	}()
 

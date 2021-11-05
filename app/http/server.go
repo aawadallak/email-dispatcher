@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"latest/app/http/routes"
 	"latest/config"
+	zapper "latest/pkg/logger"
 	"log"
 
 	"github.com/gofiber/fiber/v2"
@@ -26,7 +27,7 @@ func (s *Server) Run() {
 
 	s.Server.Use(logger.New(logger.ConfigDefault))
 
-	config.Logger().Info("Starting API Service")
+	zapper.Instance().Info("Starting API Service")
 
 	router := routes.SetRoute(s.Server)
 	log.Fatalln(router.Listen(fmt.Sprintf(":%s", s.Port)))

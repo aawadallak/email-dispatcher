@@ -3,12 +3,9 @@ package repository
 import (
 	"context"
 	"encoding/json"
-	"fmt"
-	"latest/config"
 	domain "latest/domain/message"
 	"latest/dto"
 	"latest/pkg/validate"
-	"strings"
 
 	"github.com/segmentio/kafka-go"
 )
@@ -17,12 +14,9 @@ type Consumer struct {
 	reader *kafka.Reader
 }
 
-func NewConsumer() *Consumer {
+func NewConsumer(reader *kafka.Reader) *Consumer {
 	return &Consumer{
-		reader: kafka.NewReader(kafka.ReaderConfig{
-			Brokers: strings.Split(config.GetConfig().Brokers, ","),
-			GroupID: fmt.Sprintf("consumer-%s", config.GetConfig().Topic),
-			Topic:   config.GetConfig().Topic}),
+		reader: reader,
 	}
 }
 

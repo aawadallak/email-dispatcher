@@ -2,7 +2,7 @@ package validate
 
 import (
 	"encoding/base64"
-	"latest/config"
+	"fmt"
 
 	"github.com/go-playground/validator/v10"
 )
@@ -13,7 +13,7 @@ func init() {
 	Validate = validator.New()
 	err := Validate.RegisterValidation("decoded", isBase64)
 	if err != nil {
-		config.Logger().Warn(err.Error())
+		fmt.Println(err)
 	}
 }
 
