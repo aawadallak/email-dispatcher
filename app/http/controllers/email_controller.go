@@ -62,7 +62,7 @@ func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 		}
 	}
 
-	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
+	svc := dispatcher.NewUsecase(repository.NewMailRepository(email.GetInstance()))
 
 	sendErr := svc.MultipartAttachments(&req)
 
@@ -88,9 +88,9 @@ func (e *EmailController) EncondedAttachments(c *fiber.Ctx) error {
 		})
 	}
 
-	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
+	svc := dispatcher.NewUsecase(repository.NewMailRepository(email.GetInstance()))
 
-	sendErr := svc.EncondedAttachments(&req)
+	sendErr := svc.Base64Attachments(&req)
 
 	if sendErr != nil {
 		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})

@@ -5,8 +5,7 @@ import (
 	"latest/dto"
 )
 
-type Usecases interface {
-	EventDispatch()
+type EmailUsecase interface {
 	MultipartAttachments(obj *dto.MultiPartEmailDTO) *domain.Err
-	EncondedAttachments(obj *dto.EmailDTO) *domain.Err
+	Base64Attachments(obj *dto.EmailDTO) *domain.Err
 }
