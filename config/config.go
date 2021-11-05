@@ -1,39 +1,35 @@
+//go:build !dev
+
 package config
 
 import (
-	"log"
-
-	"github.com/spf13/viper"
+	"os"
+	"strconv"
 )
 
 type App struct {
-	Brokers      string `mapstructure:"brokers"`
-	Topic        string `mapstructure:"topic"`
-	MailSmtp     string `mapstructure:"gmail_smtp_server"`
-	MailUser     string `mapstructure:"gmail_smtp_user"`
-	MailPassword string `mapstructure:"gmail_smtp_pass"`
-	MailPort     uint   `mapstructure:"gmail_smtp_port"`
+	Brokers      string
+	Topic        string
+	MailSmtp     string
+	MailUser     string
+	MailPassword string
+	MailPort     uint
+	ServerPort   string
 }
 
-var envConfig *viper.Viper
 var conf *App
 
 func Init() {
-
-	envConfig = viper.New()
-	envConfig.AddConfigPath(".")
-	envConfig.AddConfigPath("../")
-	envConfig.SetConfigType("env")
-	envConfig.SetConfigName(`.env`)
-
-	if err := envConfig.ReadInConfig(); err != nil {
-		log.Fatalf("Error on reading the envConfig file: %v", err)
+	port, _ := strconv.Atoi(os.Getenv("SMTP_PORT"))
+	conf = &App{
+		Brokers:      os.Getenv("KAFKA_BROKERS"),
+		Topic:        os.Getenv("KAFKA_TOPIC_READER"),
+		MailSmtp:     os.Getenv("SMTP_SERVER"),
+		MailUser:     os.Getenv("SMTP_USER"),
+		MailPassword: os.Getenv("STMP_PASS"),
+		MailPort:     uint(port),
+		ServerPort:   os.Getenv("SERVER_PORT"),
 	}
-	marshallErr := envConfig.Unmarshal(&conf)
-	if marshallErr != nil {
-		log.Fatalf("Error on unmarshalling the envConfig file: %v", marshallErr)
-	}
-
 }
 
 func GetConfig() *App {

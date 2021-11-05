@@ -1,7 +1,11 @@
 package mail
 
-import "latest/domain/message"
+import (
+	"latest/domain"
+	"latest/domain/message"
+)
 
 type Repository interface {
-	SendMessage(e message.Message) error
+	SendMessage(e *message.Message) *domain.Err
+	SendMessageBase64(e *message.Message) *domain.Err
 }

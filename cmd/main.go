@@ -2,14 +2,20 @@ package main
 
 import (
 	"latest/app"
+	"latest/app/http"
 	"latest/config"
+	"latest/config/email"
+	"latest/pkg/logger"
 )
 
 func main() {
 
+	logger.InitLogger()
 	config.Init()
-	config.InitLogger()
-	config.Logger().Info("Starting service")
+	email.Setup()
+
+	api := http.NewServer()
+	api.Run()
 
 	app.Start()
 }

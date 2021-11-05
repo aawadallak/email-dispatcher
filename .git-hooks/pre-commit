@@ -1,0 +1,13 @@
+#!/bin/sh
+
+branch="$(git rev-parse --abbrev-ref HEAD)"
+
+if [ "$branch" = "master" ]; then
+  echo "You can't commit directly to master branch"
+  exit 1
+fi
+
+if [ "$branch" = "develop" ]; then
+  echo "You can't commit directly to develop branch, create a new branch following git flow"
+  exit 1
+fi
