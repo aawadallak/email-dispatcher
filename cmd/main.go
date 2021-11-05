@@ -1,6 +1,7 @@
 package main
 
 import (
+	"latest/app"
 	"latest/app/http"
 	"latest/config"
 	"latest/config/email"
@@ -16,5 +17,5 @@ func main() {
 	api := http.NewServer()
 	api.Run()
 
-	//app.Start()
+	app.Start()
 }
