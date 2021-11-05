@@ -2,27 +2,20 @@ package app
 
 import (
 	"latest/config"
-	"latest/domain/mail"
+	"latest/config/email"
 	"latest/infra/repository"
-	"latest/usecases/dispatcher"
+	"latest/usecases/consumer"
 )
 
 func Start() {
 
 	config.Logger().Info("Starting service")
 
-	setup := mail.NewMail(
-		config.GetConfig().MailSmtp,
-		config.GetConfig().MailUser,
-		config.GetConfig().MailPassword,
-		config.GetConfig().MailPort,
-	)
+	mail := repository.NewMailRepository(email.GetInstance())
 
-	mail := repository.NewMailRepository(setup)
+	repository := repository.NewConsumer()
 
-	consumer := repository.NewConsumer()
+	svc := consumer.NewUsecase(mail, repository)
 
-	svc := dispatcher.NewConsumerDispatcher(mail, consumer)
-
-	svc.EventDispatch()
+	svc.Dispatch()
 }

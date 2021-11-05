@@ -1,6 +1,7 @@
 package controllers
 
 import (
+	"latest/config"
 	"latest/config/email"
 	"latest/dto"
 	"latest/infra/repository"
@@ -30,15 +31,11 @@ func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 		})
 	}
 
-	defer func() error {
+	defer func() {
 		err := files.RemoveAll()
 		if err != nil {
-			return c.Status(fiber.StatusOK).JSON(&dto.ErrorDTO{
-				Code:    400,
-				Message: err.Error(),
-			})
+			config.Logger().Warn(err.Error())
 		}
-		return nil
 	}()
 
 	err = mapstructure.Decode(files.Value, &req)
@@ -62,12 +59,12 @@ func (e *EmailController) MultipartDispatch(c *fiber.Ctx) error {
 		}
 	}
 
-	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
+	svc := dispatcher.NewUsecase(repository.NewMailRepository(email.GetInstance()))
 
 	sendErr := svc.MultipartAttachments(&req)
 
 	if sendErr != nil {
-		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
+		return c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})
@@ -88,12 +85,12 @@ func (e *EmailController) EncondedAttachments(c *fiber.Ctx) error {
 		})
 	}
 
-	svc := dispatcher.NewEmailDispatcher(repository.NewMailRepository(email.GetInstance()))
+	svc := dispatcher.NewUsecase(repository.NewMailRepository(email.GetInstance()))
 
-	sendErr := svc.EncondedAttachments(&req)
+	sendErr := svc.Base64Attachments(&req)
 
 	if sendErr != nil {
-		c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
+		return c.Status(sendErr.Code()).JSON(fiber.Map{"message": sendErr.Message()})
 	}
 
 	return c.Status(fiber.StatusCreated).JSON(fiber.Map{"message": "Email was dispatched"})

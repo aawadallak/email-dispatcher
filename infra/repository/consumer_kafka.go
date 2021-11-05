@@ -7,6 +7,7 @@ import (
 	"latest/config"
 	domain "latest/domain/message"
 	"latest/dto"
+	"latest/pkg/validate"
 	"strings"
 
 	"github.com/segmentio/kafka-go"
@@ -37,9 +38,11 @@ func (k *Consumer) Consumer() (*domain.Message, error) {
 		return nil, err
 	}
 
-	err = json.Unmarshal(message.Value, &dto)
+	if err = json.Unmarshal(message.Value, &dto); err != nil {
+		return nil, err
+	}
 
-	if err != nil {
+	if err = validate.Struct(&dto); err != nil {
 		return nil, err
 	}
 
